@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyles from './styles/GlobalStyles';
+import theme from './styles/theme';
 import Header from './components/Header';
 import SearchResults from './components/SearchResults';
 import Library from './components/Library';
@@ -46,25 +48,28 @@ const App = () => {
   };
 
   return (
-    <BrowserRouter>
-      <div className='App'>
-        <Header />
-        <main className='main-content'>
-          <Routes>
-            <Route path='/' element={
-              <>
-                <SearchBar onSearch={setSearchTerm} />
-                {loading && searchTerm && <div>Cargando...</div>}
-                {error && searchTerm && <div>Error: {error} <button onClick={refetch}>Reintentar</button></div>}
-                <Library songs={library} />
-                {searchTerm && <SearchResults songs={searchResults} onAdd={handleAddToLibrary} />}
-              </>
-            } />
-            <Route path='/song/:id' element={<SongDetail />} />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      <BrowserRouter>
+        <div className='App'>
+          <Header />
+          <main className='main-content'>
+            <Routes>
+              <Route path='/' element={
+                <>
+                  <SearchBar onSearch={setSearchTerm} />
+                  {loading && searchTerm && <div>Cargando...</div>}
+                  {error && searchTerm && <div>Error: {error} <button onClick={refetch}>Reintentar</button></div>}
+                  <Library songs={library} />
+                  {searchTerm && <SearchResults songs={searchResults} onAdd={handleAddToLibrary} />}
+                </>
+              } />
+              <Route path='/song/:id' element={<SongDetail />} />
+            </Routes>
+          </main>
+        </div>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 
